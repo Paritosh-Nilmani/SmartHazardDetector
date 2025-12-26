@@ -1,0 +1,273 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 9%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 9%;
+  --primary: 0 0% 13%;
+  --primary-foreground: 0 0% 99%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 13%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 0 0% 96%;
+  --accent-foreground: 0 0% 13%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 0 0% 55%;
+  --radius: 0.625rem;
+  --chart-1: 25 90% 55%;
+  --chart-2: 180 50% 45%;
+  --chart-3: 220 50% 35%;
+  --chart-4: 45 90% 55%;
+  --chart-5: 35 90% 55%;
+  --sidebar: 0 0% 99%;
+  --sidebar-foreground: 0 0% 9%;
+  --sidebar-primary: 0 0% 13%;
+  --sidebar-primary-foreground: 0 0% 99%;
+  --sidebar-accent: 0 0% 96%;
+  --sidebar-accent-foreground: 0 0% 13%;
+  --sidebar-border: 0 0% 90%;
+  --sidebar-ring: 0 0% 55%;
+}
+
+.dark {
+  --background: 0 0% 9%;
+  --foreground: 0 0% 99%;
+  --card: 0 0% 9%;
+  --card-foreground: 0 0% 99%;
+  --popover: 0 0% 9%;
+  --popover-foreground: 0 0% 99%;
+  --primary: 0 0% 99%;
+  --primary-foreground: 0 0% 13%;
+  --secondary: 0 0% 17%;
+  --secondary-foreground: 0 0% 99%;
+  --muted: 0 0% 17%;
+  --muted-foreground: 0 0% 55%;
+  --accent: 0 0% 17%;
+  --accent-foreground: 0 0% 99%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 85% 60%;
+  --border: 0 0% 17%;
+  --input: 0 0% 17%;
+  --ring: 0 0% 35%;
+  --chart-1: 260 80% 55%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 35 90% 55%;
+  --chart-4: 290 80% 55%;
+  --chart-5: 10 80% 55%;
+  --sidebar: 0 0% 13%;
+  --sidebar-foreground: 0 0% 99%;
+  --sidebar-primary: 260 80% 55%;
+  --sidebar-primary-foreground: 0 0% 99%;
+  --sidebar-accent: 0 0% 17%;
+  --sidebar-accent-foreground: 0 0% 99%;
+  --sidebar-border: 0 0% 17%;
+  --sidebar-ring: 0 0% 35%;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+* {
+  border-color: hsl(var(--border));
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.bg-background {
+  background-color: hsl(var(--background));
+}
+.bg-foreground {
+  background-color: hsl(var(--foreground));
+}
+.bg-card {
+  background-color: hsl(var(--card));
+}
+.bg-primary {
+  background-color: hsl(var(--primary));
+}
+.bg-secondary {
+  background-color: hsl(var(--secondary));
+}
+.bg-muted {
+  background-color: hsl(var(--muted));
+}
+.bg-accent {
+  background-color: hsl(var(--accent));
+}
+.bg-destructive {
+  background-color: hsl(var(--destructive));
+}
+.bg-popover {
+  background-color: hsl(var(--popover));
+}
+
+.text-foreground {
+  color: hsl(var(--foreground));
+}
+.text-background {
+  color: hsl(var(--background));
+}
+.text-card-foreground {
+  color: hsl(var(--card-foreground));
+}
+.text-primary {
+  color: hsl(var(--primary));
+}
+.text-primary-foreground {
+  color: hsl(var(--primary-foreground));
+}
+.text-secondary-foreground {
+  color: hsl(var(--secondary-foreground));
+}
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground));
+}
+.text-accent-foreground {
+  color: hsl(var(--accent-foreground));
+}
+.text-destructive {
+  color: hsl(var(--destructive));
+}
+.text-destructive-foreground {
+  color: hsl(var(--destructive-foreground));
+}
+.text-popover-foreground {
+  color: hsl(var(--popover-foreground));
+}
+
+.border-border {
+  border-color: hsl(var(--border));
+}
+.border-input {
+  border-color: hsl(var(--input));
+}
+.ring-ring {
+  --tw-ring-color: hsl(var(--ring));
+}
+
+.rounded-lg {
+  border-radius: var(--radius);
+}
+.rounded-md {
+  border-radius: calc(var(--radius) - 2px);
+}
+.rounded-sm {
+  border-radius: calc(var(--radius) - 4px);
+}
+
+/* Updated hazard type colors - specific colors for each hazard type */
+.bg-hazard-speedbreaker {
+  background-color: #dc143c; /* Crimson Red */
+}
+.bg-hazard-pothole {
+  background-color: #800000; /* Maroon */
+}
+.bg-hazard-manhole {
+  background-color: #ffa500; /* Orange */
+}
+.text-hazard-speedbreaker {
+  color: #dc143c;
+}
+.text-hazard-pothole {
+  color: #800000;
+}
+.text-hazard-manhole {
+  color: #ffa500;
+}
+
+/* Updated severity level colors - distinct from hazard types */
+.bg-alert-low {
+  background-color: #ffb700; /* Safety Orange */
+}
+.bg-alert-medium {
+  background-color: #ffbf00; /* Amber */
+}
+.bg-alert-high {
+  background-color: #dc143c; /* Scarlet Red */
+}
+.text-alert-low {
+  color: #ffb700;
+}
+.text-alert-medium {
+  color: #ffbf00;
+}
+.text-alert-high {
+  color: #dc143c;
+}
+.bg-glass {
+  background-color: rgba(255, 255, 255, 0.67);
+  backdrop-filter: blur(8px);
+}
+.dark .bg-glass {
+  background-color: rgba(30, 30, 30, 0.67);
+}
