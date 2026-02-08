@@ -113,10 +113,10 @@ export const buildRouteSummary = (hazards, routePath, filters) => {
   }
 
   const summary = {
-    speed_breaker: { low: 0, medium: 0, high: 0 },
-    pothole: { low: 0, medium: 0, high: 0 },
-    manhole: { low: 0, medium: 0, high: 0 },
-  }
+  speed_breaker: { low: 0, medium: 0, high: 0 },
+  pothole: { low: 0, medium: 0, high: 0 },
+}
+
 
   hazards.forEach((hazard) => {
     if (!filters.types.includes(hazard.type)) return
@@ -124,9 +124,11 @@ export const buildRouteSummary = (hazards, routePath, filters) => {
     if (filters.onlyVerified && !hazard.verified) return
 
     if (isHazardNearRoute(hazard, routePath, 100)) {
-      if (summary[hazard.type]) {
-        summary[hazard.type][hazard.severity]++
-      }
+      const normalizedType = hazard.type === "manhole" ? "pothole" : hazard.type
+       if (summary[normalizedType]) {
+       summary[normalizedType][hazard.severity]++
+}
+
     }
   })
 
