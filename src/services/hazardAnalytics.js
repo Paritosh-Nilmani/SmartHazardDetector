@@ -44,7 +44,7 @@ export const generateStatusText = (hazardsInProximity, userLocation) => {
   const hazardLabels = {
     speed_breaker: "Speed Breaker",
     pothole: "Pothole",
-    manhole: "Manhole",
+    manhole: "Pothole",
   }
 
   const distance = Math.round(closest.distanceFromUser || 0)
