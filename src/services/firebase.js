@@ -145,9 +145,19 @@ export const subscribeToHazards = (callback) => {
         q,
         (snapshot) => {
           const hazards = []
+          // snapshot.forEach((doc) => {
+          //   hazards.push({ id: doc.id, ...doc.data() })
+          // })
           snapshot.forEach((doc) => {
-            hazards.push({ id: doc.id, ...doc.data() })
-          })
+            const data = doc.data()
+            hazards.push({
+            id: doc.id,
+            ...data,
+            // Normalize legacy hazard types
+            type: data.type === "manhole" ? "pothole" : data.type,
+            })
+         })
+
           console.log("[v0] Firebase hazards loaded:", hazards.length)
           callback(hazards)
         },
