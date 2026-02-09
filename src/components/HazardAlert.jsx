@@ -12,7 +12,7 @@ export const HazardAlert = ({ hazard, distance, onDismiss }) => {
   const hazardLabels = {
     speed_breaker: "Speed Breaker",
     pothole: "Pothole",
-    manhole: "Manhole",
+    manhole: "Pothole",
   }
 
   const severityColors = {
