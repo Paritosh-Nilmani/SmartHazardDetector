@@ -2,8 +2,25 @@
 
 import { useState, useEffect } from "react"
 
+// export const DetectionConfirmationToast = ({ detection, onConfirm, onDismiss }) => {
+//   const [isVisible, setIsVisible] = useState(!!detection)
+
+//   useEffect(() => {
+//     setIsVisible(!!detection)
+//     if (detection) {
+//       const timer = setTimeout(() => {
+//         setIsVisible(false)
+//       }, 8000)
+//       return () => clearTimeout(timer)
+//     }
+//   }, [detection])
+
 export const DetectionConfirmationToast = ({ detection, onConfirm, onDismiss }) => {
   const [isVisible, setIsVisible] = useState(!!detection)
+
+  // 🔴 ADD THIS LINE
+  const normalizedType =
+    detection?.type === "manhole" ? "pothole" : detection?.type
 
   useEffect(() => {
     setIsVisible(!!detection)
@@ -14,6 +31,7 @@ export const DetectionConfirmationToast = ({ detection, onConfirm, onDismiss }) 
       return () => clearTimeout(timer)
     }
   }, [detection])
+
 
   if (!isVisible || !detection) return null
 
