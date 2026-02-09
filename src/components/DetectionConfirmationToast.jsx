@@ -20,7 +20,7 @@ export const DetectionConfirmationToast = ({ detection, onConfirm, onDismiss }) 
   const hazardLabels = {
     speed_breaker: "Speed Breaker",
     pothole: "Pothole",
-    manhole: "Manhole",
+    manhole: "Pothole",
   }
 
   const hazardColors = {
