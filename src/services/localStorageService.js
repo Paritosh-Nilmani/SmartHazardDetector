@@ -25,12 +25,29 @@ export const saveHazardLocally = (hazardData) => {
 export const getLocalHazards = () => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
-    return stored ? JSON.parse(stored) : []
+    const hazards = stored ? JSON.parse(stored) : []
+
+    // Normalize legacy hazard types
+    return hazards.map((hazard) => ({
+      ...hazard,
+      type: hazard.type === "manhole" ? "pothole" : hazard.type,
+    }))
   } catch (error) {
     console.error("[v0] Error reading from localStorage:", error)
     return []
   }
 }
+
+
+// export const getLocalHazards = () => {
+//   try {
+//     const stored = localStorage.getItem(STORAGE_KEY)
+//     return stored ? JSON.parse(stored) : []
+//   } catch (error) {
+//     console.error("[v0] Error reading from localStorage:", error)
+//     return []
+//   }
+// }
 
 export const updateLocalHazard = (hazardId, updates) => {
   try {
