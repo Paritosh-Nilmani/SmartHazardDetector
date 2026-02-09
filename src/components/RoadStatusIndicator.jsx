@@ -17,7 +17,7 @@ export const RoadStatusIndicator = ({ hazards, predictedHazards, currentSegmentS
   const hazardLabels = {
     speed_breaker: "Speed Breaker",
     pothole: "Pothole",
-    manhole: "Manhole",
+    manhole: "Pothole",
   }
 
   return (
