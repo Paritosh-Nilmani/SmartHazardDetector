@@ -152,20 +152,20 @@ export const detectElevationChanges = (elevationData, threshold = 2) => {
 
     if (!prev?.location || !curr?.location || !next?.location) continue
 
-    const dipDown = prev.elevation - curr.elevation  // elevation drops (dip)
-    const riseUp = next.elevation - curr.elevation   // elevation rises back (up)
+    const dipDown = prev.elevation - curr.elevation   // drops into dip
+    const riseUp = next.elevation - curr.elevation    // rises back up
+    const riseFromPrev = curr.elevation - prev.elevation  // rises up (speed breaker)
+    const dropToNext = curr.elevation - next.elevation    // drops back down
 
-    // Pothole: dip then up pattern
+    // ✅ POTHOLE: dip then up pattern (confidence >= 80%)
     if (dipDown > 0 && riseUp > 0) {
       const dipMagnitude = Math.min(dipDown, riseUp)
 
       if (dipMagnitude >= threshold) {
-        // Confidence based on how symmetric and deep the dip is
         const symmetry = 1 - Math.abs(dipDown - riseUp) / Math.max(dipDown, riseUp)
         const depthScore = Math.min(dipMagnitude / 5, 1)
         const confidence = symmetry * depthScore
 
-        // Only report if confidence >= 80%
         if (confidence >= 0.8) {
           const severity = dipMagnitude > 5 ? "high" : dipMagnitude > 3 ? "medium" : "low"
 
@@ -183,11 +183,30 @@ export const detectElevationChanges = (elevationData, threshold = 2) => {
         }
       }
     }
+
+    // ✅ SPEED BREAKER: up then down pattern (hump)
+    if (riseFromPrev > 0 && dropToNext > 0) {
+      const humpMagnitude = Math.min(riseFromPrev, dropToNext)
+
+      if (humpMagnitude > threshold) {
+        const elevationChange = Math.abs(curr.elevation - prev.elevation)
+        const severity = elevationChange > 5 ? "high" : elevationChange > 3 ? "medium" : "low"
+
+        hazards.push({
+          type: "speed_breaker",
+          lat: curr.location.lat,
+          lng: curr.location.lng,
+          severity,
+          source: "elevation_detection",
+          elevationChange,
+          confidence: Math.min(elevationChange / 10, 1),
+          detectedAt: new Date().toISOString(),
+        })
+      }
+    }
   }
 
   return hazards
 }
-
-
 
 
