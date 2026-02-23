@@ -232,10 +232,10 @@ export const analyzeRouteForHazards = async (route, existingHazards) => {
       console.log("[v0] Received elevation data:", elevationData.length, "points")
       const rawElevationHazards = detectElevationChanges(elevationData)
 
-      // ✅ Potholes already filtered at 80% inside elevationService
+      // Potholes already filtered at 80% inside elevationService
       // Only apply MIN_CONFIDENCE_THRESHOLD for speed_breakers from elevation
       elevationHazards = rawElevationHazards.filter((h) => {
-        if (h.type === "pothole") return true // already guaranteed >= 0.8
+        if (h.type === "pothole") return true
         return (h.confidence || 0) >= MIN_CONFIDENCE_THRESHOLD
       })
 
@@ -290,9 +290,8 @@ const clusterPredictions = (speedChanges, elevationHazards, existingHazards) => 
     })
 
     const baseConfidence = prediction.confidence || 0.4
-
-    // ✅ Never downgrade pothole confidence below 0.8
     let finalConfidence
+
     if (nearbyExisting.length > 0) {
       finalConfidence = Math.min(baseConfidence + nearbyExisting.length * 0.05, 1)
     } else {
