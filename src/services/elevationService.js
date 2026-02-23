@@ -173,7 +173,7 @@ export const getElevationAlongPath = async (path) => {
   }
 }
 
-export const detectElevationChanges = (elevationData, threshold = 2) => {
+export const detectElevationChanges = (elevationData, threshold = 1) => {
   const hazards = []
 
   if (!elevationData || elevationData.length < 3) return hazards
@@ -189,7 +189,6 @@ export const detectElevationChanges = (elevationData, threshold = 2) => {
     }
   })
 
-  // 🔹 Distance function (used for filtering slopes)
   const getDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371000
     const dLat = ((lat2 - lat1) * Math.PI) / 180
@@ -223,17 +222,15 @@ export const detectElevationChanges = (elevationData, threshold = 2) => {
     const bumpDown = currElevation - nextElevation
 
     // =========================
-    // 🔥 POTHOLE DETECTION (includes manholes)
+    // 🔥 POTHOLE DETECTION
     // =========================
     const isDip = drop > 0 && rise > 0
 
     if (isDip) {
       const elevationChange = Math.min(drop, rise)
 
-      // Ignore small dips (noise)
       if (elevationChange < 0.5) continue
 
-      // Ignore long gradual dips (not potholes)
       const dist = getDistance(
         prev.location.lat,
         prev.location.lng,
@@ -241,23 +238,18 @@ export const detectElevationChanges = (elevationData, threshold = 2) => {
         next.location.lng
       )
 
-      if (dist > 20) continue
+      if (dist > 30) continue
 
-      // 🔹 Confidence calculation
       let confidence = 0
 
-      // Depth score (40%)
       if (elevationChange >= 0.7) confidence += 0.4
       else if (elevationChange >= 0.5) confidence += 0.3
 
-      // Pattern score (30%)
       confidence += 0.3
 
-      // Symmetry / consistency (30%)
       const consistency = Math.abs(drop - rise) < 0.3
       if (consistency) confidence += 0.3
 
-      // Only high confidence potholes
       if (confidence < 0.8) continue
 
       const severity =
@@ -268,7 +260,7 @@ export const detectElevationChanges = (elevationData, threshold = 2) => {
           : "low"
 
       hazards.push({
-        type: "pothole", // 🔥 unified type (manhole included)
+        type: "pothole",
         lat: curr.location.lat,
         lng: curr.location.lng,
         severity,
@@ -280,7 +272,7 @@ export const detectElevationChanges = (elevationData, threshold = 2) => {
     }
 
     // =========================
-    // 🔥 SPEED BREAKER DETECTION
+    // 🔥 SPEED BREAKER DETECTION (Balanced & Working)
     // =========================
     const isBump = bumpUp > 0 && bumpDown > 0
 
@@ -289,11 +281,6 @@ export const detectElevationChanges = (elevationData, threshold = 2) => {
 
       if (elevationChange < threshold) continue
 
-      // 🔹 Sharpness check (avoid slopes)
-      const sharpness = Math.abs(bumpUp - bumpDown)
-      if (sharpness > 1) continue
-
-      // 🔹 Distance check (avoid hills)
       const dist = getDistance(
         prev.location.lat,
         prev.location.lng,
@@ -301,27 +288,27 @@ export const detectElevationChanges = (elevationData, threshold = 2) => {
         next.location.lng
       )
 
-      if (dist > 20) continue
+      // Less strict than pothole
+      if (dist > 50) continue
 
-      // 🔹 Confidence calculation
+      const sharpness = Math.abs(bumpUp - bumpDown)
+
       let confidence = 0
 
-      // Height score (50%)
-      if (elevationChange > 4) confidence += 0.5
-      else if (elevationChange > 2) confidence += 0.3
+      if (elevationChange > 3) confidence += 0.5
+      else if (elevationChange > 1) confidence += 0.3
 
-      // Pattern score (30%)
       confidence += 0.3
 
-      // Sharpness score (20%)
-      if (sharpness < 0.5) confidence += 0.2
+      if (sharpness < 1) confidence += 0.2
 
-      if (confidence < 0.6) continue
+      // Less strict than pothole
+      if (confidence < 0.5) continue
 
       const severity =
-        elevationChange > 5
+        elevationChange > 4
           ? "high"
-          : elevationChange > 3
+          : elevationChange > 2
           ? "medium"
           : "low"
 
@@ -338,24 +325,8 @@ export const detectElevationChanges = (elevationData, threshold = 2) => {
     }
   }
 
-  // 🔹 Remove duplicates (~10 meters)
-  const filteredHazards = []
-
-  hazards.forEach((h) => {
-    const exists = filteredHazards.some((f) => {
-      const dist = Math.sqrt(
-        Math.pow(f.lat - h.lat, 2) + Math.pow(f.lng - h.lng, 2)
-      )
-      return dist < 0.0001
-    })
-
-    if (!exists) filteredHazards.push(h)
-  })
-
-  return filteredHazards
+  return hazards
 }
-
-
 
 
 
